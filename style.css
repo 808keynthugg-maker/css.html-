@@ -1,0 +1,452 @@
+/* ============================================================
+NEBULA — Enhanced Stylesheet
+============================================================ */
+
+/* ---------- Переменные и сброс ---------- */
+:root {
+--bg: #06060f;
+--bg-soft: #0e0e1f;
+--accent1: #7b2ff7;
+--accent2: #f107a3;
+--accent3: #00d4ff;
+--accent4: #ff6b35;
+--text: #ecedf5;
+--text-dim: rgba(236, 237, 245, 0.62);
+--glass: rgba(255, 255, 255, 0.045);
+--glass-border: rgba(255, 255, 255, 0.09);
+--radius: 20px;
+--ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+html {
+scroll-behavior: smooth;
+-webkit-text-size-adjust: 100%;
+}
+
+body {
+font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+background: var(--bg);
+color: var(--text);
+overflow-x: hidden;
+min-height: 100vh;
+line-height: 1.6;
+-webkit-font-smoothing: antialiased;
+position: relative;
+}
+
+/* Слой шума для «плёночной» текстуры */
+body::before {
+content: "";
+position: fixed;
+inset: 0;
+z-index: 1;
+pointer-events: none;
+opacity: 0.035;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Виньетка по краям */
+body::after {
+content: "";
+position: fixed;
+inset: 0;
+z-index: 1;
+pointer-events: none;
+background: radial-gradient(ellipse at 50% 30%, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ---------- Анимированные блобы ---------- */
+.blob {
+position: fixed;
+border-radius: 50%;
+filter: blur(130px);
+opacity: 0.42;
+z-index: 0;
+will-change: transform;
+animation: float 14s ease-in-out infinite;
+}
+.blob1 {
+width: 560px; height: 560px;
+background: radial-gradient(circle, var(--accent1), transparent 70%);
+top: -180px; left: -180px;
+}
+.blob2 {
+width: 460px; height: 460px;
+background: radial-gradient(circle, var(--accent2), transparent 70%);
+bottom: -140px; right: -140px;
+animation-delay: -5s;
+animation-duration: 17s;
+}
+.blob3 {
+width: 380px; height: 380px;
+background: radial-gradient(circle, var(--accent3), transparent 70%);
+top: 42%; left: 52%;
+animation-delay: -9s;
+animation-duration: 20s;
+}
+
+@keyframes float {
+0%, 100% { transform: translate(0, 0) scale(1); }
+33%      { transform: translate(70px, -50px) scale(1.12); }
+66%      { transform: translate(-50px, 60px) scale(0.9); }
+}
+
+/* ---------- Навигация ---------- */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem clamp(1.2rem, 5vw, 4rem);
+backdrop-filter: blur(20px) saturate(180%);
+-webkit-backdrop-filter: blur(20px) saturate(180%);
+background: rgba(6, 6, 15, 0.55);
+border-bottom: 1px solid var(--glass-border);
+z-index: 100;
+transition: padding 0.4s var(--ease), background 0.4s;
+}
+nav.scrolled {
+padding-block: 0.7rem;
+background: rgba(6, 6, 15, 0.82);
+}
+
+.logo {
+font-size: 1.45rem;
+font-weight: 800;
+letter-spacing: -0.03em;
+background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+background-size: 200% auto;
+-webkit-background-clip: text;
+background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: logoShift 6s linear infinite;
+cursor: default;
+user-select: none;
+}
+@keyframes logoShift {
+to { background-position: 200% center; }
+}
+
+nav ul {
+display: flex;
+gap: clamp(1rem, 2.5vw, 2.4rem);
+list-style: none;
+}
+nav a {
+color: var(--text-dim);
+text-decoration: none;
+font-weight: 500;
+font-size: 0.95rem;
+position: relative;
+padding-block: 0.3rem;
+transition: color 0.3s;
+}
+nav a::after {
+content: "";
+position: absolute;
+bottom: 0; left: 0;
+width: 100%; height: 2px;
+border-radius: 2px;
+background: linear-gradient(90deg, var(--accent1), var(--accent3));
+transform: scaleX(0);
+transform-origin: right;
+transition: transform 0.4s var(--ease);
+}
+nav a:hover {
+color: #fff;
+}
+nav a:hover::after {
+transform: scaleX(1);
+transform-origin: left;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+position: relative;
+z-index: 2;
+min-height: 100vh;
+min-height: 100svh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+padding: 0 clamp(1.2rem, 5vw, 4rem);
+}
+
+/* Бейдж над заголовком */
+.hero::before {
+content: "✨ Новая версия 2.0";
+display: inline-block;
+margin-bottom: 1.6rem;
+padding: 0.45rem 1.1rem;
+font-size: 0.8rem;
+font-weight: 600;
+letter-spacing: 0.04em;
+color: var(--text);
+border-radius: 50px;
+background: var(--glass);
+border: 1px solid var(--glass-border);
+backdrop-filter: blur(10px);
+animation: fadeUp 0.9s var(--ease) both;
+}
+
+.hero h1 {
+font-size: clamp(2.4rem, 7.5vw, 5.2rem);
+font-weight: 900;
+line-height: 1.05;
+letter-spacing: -0.04em;
+margin-bottom: 1.5rem;
+background: linear-gradient(120deg, #fff 15%, var(--accent2) 45%, var(--accent3) 75%, #fff 100%);
+background-size: 220% auto;
+-webkit-background-clip: text;
+background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: fadeUp 0.9s 0.1s var(--ease) both, shine 5s 1s linear infinite;
+text-wrap: balance;
+}
+@keyframes shine {
+to { background-position: 220% center; }
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(28px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero p {
+font-size: clamp(1rem, 1.9vw, 1.25rem);
+max-width: 580px;
+color: var(--text-dim);
+margin-bottom: 2.6rem;
+animation: fadeUp 0.9s 0.22s var(--ease) both;
+text-wrap: pretty;
+}
+
+/* ---------- Кнопки ---------- /
+.btn {
+position: relative;
+isolation: isolate;
+padding: 1rem 2.6rem;
+border: none;
+border-radius: 50px;
+font-family: inherit;
+font-size: 1rem;
+font-weight: 700;
+letter-spacing: 0.01em;
+cursor: pointer;
+color: #fff;
+background: linear-gradient(90deg, var(--accent1), var(--accent2));
+box-shadow: 0 8px 30px rgba(241, 7, 163, 0.35),
+inset 0 1px 0 rgba(255, 255, 255, 0.25);
+transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+animation: fadeUp 0.9s 0.34s var(--ease) both;
+overflow: hidden;
+}
+/ Блик, пробегающий по кнопке */
+.btn::after {
+content: "";
+position: absolute;
+inset: 0;
+background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%);
+transform: translateX(-130%);
+transition: transform 0.7s var(--ease);
+}
+.btn:hover::after {
+transform: translateX(130%);
+}
+.btn:hover {
+transform: translateY(-4px) scale(1.04);
+box-shadow: 0 16px 50px rgba(241, 7, 163, 0.55),
+inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.btn:active {
+transform: translateY(-1px) scale(0.99);
+}
+.btn:focus-visible {
+outline: 2px solid var(--accent3);
+outline-offset: 4px;
+}
+
+/* ---------- Секция карточек ---------- */
+.cards {
+position: relative;
+z-index: 2;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+gap: clamp(1.2rem, 2.5vw, 2rem);
+padding: clamp(4rem, 9vw, 7rem) clamp(1.2rem, 5vw, 4rem);
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.card {
+position: relative;
+overflow: hidden;
+padding: clamp(2rem, 3vw, 2.6rem) clamp(1.5rem, 2.5vw, 2.2rem);
+border-radius: var(--radius);
+background: var(--glass);
+border: 1px solid var(--glass-border);
+backdrop-filter: blur(14px);
+-webkit-backdrop-filter: blur(14px);
+transition: transform 0.5s var(--ease),
+border-color 0.5s var(--ease),
+box-shadow 0.5s var(--ease),
+background 0.5s var(--ease);
+opacity: 0;
+transform: translateY(42px);
+will-change: transform, opacity;
+}
+.card.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* Светящийся градиент, следующий за курсором */
+.card::before {
+content: "";
+position: absolute;
+inset: -1px;
+border-radius: inherit;
+background: radial-gradient(
+350px circle at var(--mx, 50%) var(--my, 50%),
+rgba(123, 47, 247, 0.22),
+transparent 60%
+);
+opacity: 0;
+transition: opacity 0.5s var(--ease);
+pointer-events: none;
+z-index: 0;
+}
+.card:hover::before {
+opacity: 1;
+}
+
+/* Верхняя подсветка-«блик» по краю карточки */
+.card::after {
+content: "";
+position: absolute;
+top: 0; left: 10%; right: 10%;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+opacity: 0;
+transition: opacity 0.5s var(--ease);
+}
+.card:hover::after {
+opacity: 1;
+}
+
+.card > * {
+position: relative;
+z-index: 1;
+}
+
+.
+card:hover {
+transform: translateY(-10px);
+border-color: rgba(123, 47, 247, 0.55);
+background: rgba(255, 255, 255, 0.07);
+box-shadow: 0 28px 70px rgba(123, 47, 247, 0.28),
+0 0 0 1px rgba(123, 47, 247, 0.2) inset;
+}
+
+.card .icon {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 58px;
+height: 58px;
+margin-bottom: 1.4rem;
+font-size: 1.7rem;
+border-radius: 16px;
+background: linear-gradient(135deg, rgba(123, 47, 247, 0.22), rgba(0, 212, 255, 0.16));
+border: 1px solid var(--glass-border);
+transition: transform 0.5s var(--ease), background 0.5s;
+}
+.card:hover .icon {
+transform: translateY(-3px) rotate(-6deg) scale(1.08);
+background: linear-gradient(135deg, rgba(123, 47, 247, 0.35), rgba(241, 7, 163, 0.25));
+}
+
+.card h3 {
+font-size: 1.25rem;
+font-weight: 700;
+letter-spacing: -0.02em;
+margin-bottom: 0.6rem;
+color: #fff;
+}
+.card p {
+color: var(--text-dim);
+font-size: 0.95rem;
+line-height: 1.65;
+}
+
+/* ---------- Футер ---------- */
+footer {
+position: relative;
+z-index: 2;
+text-align: center;
+padding: 3rem clamp(1.2rem, 5vw, 4rem);
+font-size: 0.9rem;
+color: var(--text-dim);
+border-top: 1px solid var(--glass-border);
+background: linear-gradient(180deg, transparent, rgba(123, 47, 247, 0.05));
+}
+footer::before {
+content: "";
+position: absolute;
+top: 0; left: 50%;
+transform: translateX(-50%);
+width: 180px; height: 1px;
+background: linear-gradient(90deg, transparent, var(--accent1), transparent);
+}
+
+/* ---------- Скроллбар ---------- */
+::-webkit-scrollbar {
+width: 10px;
+}
+::-webkit-scrollbar-track {
+background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+background: linear-gradient(180deg, var(--accent1), var(--accent2));
+border-radius: 10px;
+border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+background: linear-gradient(180deg, var(--accent2), var(--accent3));
+}
+
+/* ---------- Адаптивность ---------- /
+@media (max-width: 720px) {
+nav ul {
+gap: 1rem;
+font-size: 0.85rem;
+}
+.hero::before {
+font-size: 0.72rem;
+}
+.card::before {
+display: none; / отключаем эффект курсора на тачах */
+}
+}
+
+/* Уважаем системные настройки */
+@media (prefers-reduced-motion: reduce) {
+*,
+*::before,
+*::after {
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.01ms !important;
+scroll-behavior: auto !important;
+}
+}
